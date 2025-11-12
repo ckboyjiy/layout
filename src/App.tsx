@@ -22,6 +22,13 @@ function App() {
       // 리사이즈 후 다시 그리기
       ctx.fillStyle = '#1a1a2e'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // 중앙에 "지도" 텍스트 그리기
+      ctx.fillStyle = '#ffffff'
+      ctx.font = '48px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('지도', canvas.width / 2, canvas.height / 2)
     }
 
     resizeCanvas()
