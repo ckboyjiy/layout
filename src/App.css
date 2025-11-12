@@ -179,6 +179,25 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+.open-button:focus,
+.close-button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* 모바일 반응형 (포트레이트) */
 @media (max-width: 768px) and (orientation: portrait) {
   /* 햄버거 버튼 표시 */
@@ -421,5 +440,4 @@
   .content-box.hidden {
     display: block;
   }
-}
 }
