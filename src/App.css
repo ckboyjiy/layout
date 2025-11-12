@@ -14,6 +14,28 @@
   z-index: 0;
 }
 
+/* 인쇄 미리보기 버튼 */
+.print-preview-button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.print-preview-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
 /* 햄버거 메뉴 버튼 (모바일에서만 표시) */
 .hamburger {
   display: none;
@@ -125,8 +147,17 @@
 }
 
 .content-box p {
-  line-height: 1.6;
+  line-height: 1.8;
   margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.article-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+  object-fit: cover;
 }
 
 .open-button,
@@ -139,6 +170,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s;
+  margin-top: 1rem;
 }
 
 .open-button:hover,
@@ -204,14 +236,190 @@
     border-radius: 20px 20px 0 0;
     padding: 1.5rem;
     min-height: 200px;
-    max-height: 50vh;
+    max-height: 70vh;
     overflow-y: auto;
     display: block;
     transition: all 0.3s ease;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   .content-box.hidden {
     display: none;
+  }
+
+  .article-image {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+  }
+}
+
+/* 인쇄 미리보기 모드 */
+.app.print-preview {
+  background: #f0f0f0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 0;
+  gap: 2rem;
+}
+
+.app.print-preview .canvas {
+  position: static;
+  width: 21cm;
+  height: 15cm;
+  border-radius: 0;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  background: #1a1a2e;
+}
+
+.app.print-preview .hamburger,
+.app.print-preview .header,
+.app.print-preview .open-button,
+.app.print-preview .close-button {
+  display: none !important;
+}
+
+.app.print-preview .print-preview-button {
+  background: rgba(220, 38, 38, 0.9);
+  border-color: rgba(255, 255, 255, 0.8);
+  position: fixed;
+}
+
+.app.print-preview .content {
+  position: static;
+  left: auto;
+  top: auto;
+  width: 21cm;
+  height: auto;
+  margin: 0;
+  padding: 2cm;
+  display: block;
+  background: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.app.print-preview .content-box {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  background: white;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 2cm;
+  column-count: 2;
+  column-gap: 1.5cm;
+  column-rule: 1px solid #ccc;
+}
+
+.app.print-preview .content-box h2 {
+  column-span: all;
+  margin-bottom: 1cm;
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5cm;
+}
+
+.app.print-preview .content-box p {
+  margin-bottom: 0.5cm;
+  color: #000;
+  text-align: justify;
+  break-inside: avoid;
+}
+
+.app.print-preview .article-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0.5cm 0;
+  break-inside: avoid;
+}
+
+.app.print-preview .content-box.hidden {
+  display: block;
+}
+
+/* 인쇄 모드 - Multi-column Layout */
+@media print {
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hamburger,
+  .header,
+  .open-button,
+  .close-button,
+  .print-preview-button {
+    display: none !important;
+  }
+
+  .canvas {
+    position: static;
+    width: 100%;
+    height: 15cm;
+    page-break-after: always;
+    display: block;
+  }
+
+  .content {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    padding: 2cm;
+    display: block;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .content-box {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    background: white;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 2cm;
+    column-count: 2;
+    column-gap: 1.5cm;
+    column-rule: 1px solid #ccc;
+  }
+
+  .content-box h2 {
+    column-span: all;
+    margin-bottom: 1cm;
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 0.5cm;
+  }
+
+  .content-box p {
+    margin-bottom: 0.5cm;
+    color: #000;
+    text-align: justify;
+    break-inside: avoid;
+  }
+
+  .article-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0.5cm 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .content-box.hidden {
+    display: block;
   }
 }
 }
