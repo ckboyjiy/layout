@@ -503,8 +503,14 @@
     padding: 0;
   }
 
+  .app {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
   .hamburger,
   .header,
+  .map-sidebar,
   .open-button,
   .close-button,
   .print-preview-button {
@@ -520,30 +526,31 @@
   }
 
   .content {
-    position: static;
-    left: auto;
-    top: auto;
-    width: 100%;
-    height: auto;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
     padding: 2cm;
-    display: block;
+    display: block !important;
     box-shadow: none;
     margin: 0;
   }
 
   .content-box {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    overflow: visible;
-    background: white;
-    border: none;
-    border-radius: 0;
-    padding: 0;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: white !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
     margin-bottom: 2cm;
     column-count: 2;
     column-gap: 1.5cm;
     column-rule: 1px solid #ccc;
+    backdrop-filter: none !important;
   }
 
   .content-box h2 {
