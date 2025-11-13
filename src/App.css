@@ -428,6 +428,7 @@
 
 .app.print-preview .hamburger,
 .app.print-preview .header,
+.app.print-preview .map-sidebar,
 .app.print-preview .open-button,
 .app.print-preview .close-button {
   display: none !important;
