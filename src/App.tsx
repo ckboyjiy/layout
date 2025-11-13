@@ -5,11 +5,17 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const section2Ref = useRef<HTMLElement>(null)
-  const openButtonRef = useRef<HTMLButtonElement>(null)
+  const lastTriggerRef = useRef<HTMLElement | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showSection2, setShowSection2] = useState(false)
   const [isPrintPreview, setIsPrintPreview] = useState(false)
   const [announceMessage, setAnnounceMessage] = useState('')
+  const [activeTool, setActiveTool] = useState<string | null>(null)
+  const [layers, setLayers] = useState({
+    base: true,
+    satellite: false,
+    traffic: false
+  })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -75,14 +81,12 @@ function App() {
         section2Ref.current.focus()
         section2Ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
-      setAnnounceMessage('관련 기사가 열렸습니다.')
-    } else {
-      // Section 2 닫힐 때
-      if (openButtonRef.current) {
-        openButtonRef.current.focus()
-        openButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }
-      setAnnounceMessage('관련 기사가 닫혔습니다.')
+      setAnnounceMessage('상세 정보가 열렸습니다.')
+    } else if (!showSection2 && lastTriggerRef.current) {
+      // Section 2 닫힐 때 - 마지막 트리거 요소로 포커스 복귀
+      lastTriggerRef.current.focus()
+      lastTriggerRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      setAnnounceMessage('상세 정보가 닫혔습니다.')
     }
 
     // 알림 메시지 초기화
@@ -121,10 +125,83 @@ function App() {
         </nav>
       </header>
 
+      {/* 지도 컨트롤 사이드바 */}
+      <aside aria-label="지도 도구" className="map-sidebar">
+        {/* 지도 탐색 */}
+        <nav aria-label="지도 탐색" className="map-navigation">
+          <div role="group" aria-label="줌 컨트롤" className="zoom-controls">
+            <button aria-label="확대" title="확대">+</button>
+            <button aria-label="축소" title="축소">−</button>
+          </div>
+          <button aria-label="현재 위치로 이동" title="현재 위치">📍</button>
+          <button aria-label="전체 보기" title="전체 보기">🌍</button>
+        </nav>
+
+        {/* 측정 도구 */}
+        <div role="toolbar" aria-label="측정 도구" className="map-tools">
+          <button
+            aria-pressed={activeTool === 'distance'}
+            aria-label="거리 측정"
+            title="거리 측정"
+            onClick={() => setActiveTool(activeTool === 'distance' ? null : 'distance')}
+          >
+            📏
+          </button>
+          <button
+            aria-pressed={activeTool === 'area'}
+            aria-label="면적 측정"
+            title="면적 측정"
+            onClick={() => setActiveTool(activeTool === 'area' ? null : 'area')}
+          >
+            📐
+          </button>
+          <button
+            aria-pressed={activeTool === 'radius'}
+            aria-label="반경 측정"
+            title="반경 측정"
+            onClick={() => setActiveTool(activeTool === 'radius' ? null : 'radius')}
+          >
+            ⭕
+          </button>
+        </div>
+
+        {/* 레이어 설정 */}
+        <form aria-label="레이어 설정" className="layer-controls">
+          <h3>레이어</h3>
+          <fieldset>
+            <legend className="sr-only">표시 레이어 선택</legend>
+            <label>
+              <input
+                type="checkbox"
+                checked={layers.base}
+                onChange={(e) => setLayers({ ...layers, base: e.target.checked })}
+              />
+              기본 지도
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={layers.satellite}
+                onChange={(e) => setLayers({ ...layers, satellite: e.target.checked })}
+              />
+              위성 지도
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={layers.traffic}
+                onChange={(e) => setLayers({ ...layers, traffic: e.target.checked })}
+              />
+              교통 정보
+            </label>
+          </fieldset>
+        </form>
+      </aside>
+
       <main className="content" role="main">
         <section
           className={`content-box ${showSection2 ? 'hidden' : ''}`}
-          aria-label="주요 기사"
+          aria-label="검색 결과"
         >
           <h2>뉴스 기사: 최신 기술 동향</h2>
           <img src="https://picsum.photos/800/400?random=1" alt="인공지능 기술 발전을 나타내는 이미지" className="article-image" />
@@ -135,12 +212,14 @@ function App() {
           <p>특히 개인정보 보호와 AI의 편향성 문제는 시급히 해결해야 할 과제로 지적되고 있습니다. 전 세계적으로 AI 윤리 가이드라인 수립을 위한 논의가 활발히 진행되고 있습니다.</p>
           <p>교육 분야에서는 AI를 활용한 맞춤형 학습 시스템이 도입되면서 학생들의 학습 효율이 크게 향상되고 있습니다. 각 학생의 수준과 학습 속도에 맞춘 개별화된 교육이 가능해졌습니다.</p>
           <button
-            ref={openButtonRef}
             className="open-button"
-            onClick={() => setShowSection2(true)}
+            onClick={(e) => {
+              lastTriggerRef.current = e.currentTarget
+              setShowSection2(true)
+            }}
             aria-expanded={showSection2}
-            aria-controls="section-2"
-            aria-label="관련 기사 열기"
+            aria-controls="detail-section"
+            aria-label="상세 정보 열기"
           >
             Open Section 2
           </button>
@@ -156,12 +235,12 @@ function App() {
           </div>
 
           {showSection2 && (
-              <section
-                id="section-2"
+              <aside
+                id="detail-section"
                 ref={section2Ref}
                 className="content-box"
                 tabIndex={-1}
-                aria-label="관련 기사"
+                aria-label="상세 정보"
               >
                 <h2>관련 기사: AI와 미래 사회</h2>
                 <img src="https://picsum.photos/800/400?random=3" alt="미래 사회의 AI와 인간 공존을 나타내는 이미지" className="article-image" />
@@ -173,11 +252,11 @@ function App() {
                 <button
                   className="close-button"
                   onClick={() => setShowSection2(false)}
-                  aria-label="관련 기사 닫기"
+                  aria-label="상세 정보 닫기"
                 >
                   Close Section 2
                 </button>
-              </section>
+              </aside>
           )}
 
       </main>

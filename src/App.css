@@ -36,6 +36,133 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* 지도 컨트롤 사이드바 */
+.map-sidebar {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 200px;
+}
+
+/* 지도 탐색 */
+.map-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.zoom-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-navigation button {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-navigation button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.map-navigation button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* 측정 도구 */
+.map-tools {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.map-tools button {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-tools button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.map-tools button[aria-pressed="true"] {
+  background: rgba(100, 150, 255, 0.5);
+  border-color: rgba(100, 150, 255, 0.8);
+}
+
+.map-tools button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* 레이어 설정 */
+.layer-controls {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+}
+
+.layer-controls h3 {
+  margin: 0 0 12px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.layer-controls fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.layer-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.layer-controls input[type="checkbox"] {
+  cursor: pointer;
+}
+
 /* 햄버거 메뉴 버튼 (모바일에서만 표시) */
 .hamburger {
   display: none;
@@ -205,6 +332,11 @@
     display: flex;
     opacity: 1;
     pointer-events: auto;
+  }
+
+  /* 지도 컨트롤 사이드바 숨기기 (모바일) */
+  .map-sidebar {
+    display: none;
   }
 
   /* 모바일 헤더 (사이드 드로어) */
